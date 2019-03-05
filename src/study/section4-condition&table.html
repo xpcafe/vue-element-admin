@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <style>
+        .redClass {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <!-- 条件渲染-->
+    <h1 v-if="ok" :class="{redClass:isChoose}">yes</h1>
+    <h1 v-else>No</h1>
+
+    <div v-if="Math.random() > 0.5">
+        Now you see me
+    </div>
+    <div v-else>
+        Now you don't
+    </div>
+
+    <div v-if="type === 'A'">
+        A
+    </div>
+    <div v-else-if="type === 'B'">
+        B
+    </div>
+    <div v-else-if="type === 'C'">
+        C
+    </div>
+    <div v-else>
+        Not A/B/C
+    </div>
+
+    <h1 v-show="ok">Hello!</h1>
+    <!-- 列表渲染-->
+    <ul id="for1">
+        <li v-for="(item,inx) in arrs">
+            {{item.message}},{{inx}}
+        </li>
+        <li v-for="(v,p,inx) in obj">
+            {{v}}-{{p}}-{{inx}}
+        </li>
+    </ul>
+
+    <div v-for="item in arrs" :key="item.id">
+
+    </div>
+    <hr>
+    <li v-for="n in evenNumbers">{{ n }}</li>
+
+    <li v-for="n in even(numbers)">{{ n }}</li>
+
+    <div>
+        <span v-for="n in 10">{{ n }} </span>
+    </div>
+
+
+    <ul>
+        <template v-for="item in arrs">
+            <li>{{ item.message }}</li>
+            <li class="divider" role="presentation"></li>
+        </template>
+    </ul>
+
+    <li v-for="todo in arrs" v-if="!todo.isComplete">
+        {{ todo.message }}
+    </li>
+</div>
+
+<div id="todo-list-example">
+    <form @submit.prevent="addNewTodo">
+        <label for="new-todo">Add a todo</label>
+        <input
+                v-model="newTodoText"
+                id="new-todo"
+                placeholder="E.g. Feed the cat"
+        >
+        <button>Add</button>
+    </form>
+    <ul>
+        <li
+                is="todo-item"
+                v-for="(todo, index) in todos"
+                :key="todo.id"
+                :title="todo.title"
+                @remove="todos.splice(index, 1)"
+        ></li>
+    </ul>
+</div>
+
+<!-- 列表渲染-->
+<script>
+    const vm = new Vue({
+        el: '#app',
+        data: {
+            isChoose: true,
+            ok: true,
+            type: 'A',
+            arrs: [{message: 'Foo',isComplete:true}, {message: 'Bar',isComplete:false}],
+            obj: {
+                opponent: 'one',
+                desperately: 'two',
+                buoy: 'three'
+            },
+            numbers: [1, 2, 3, 4, 5]
+        },
+        computed: {
+            evenNumbers: function () {
+                return this.numbers.filter(function (number) {
+                    return number % 2 === 0
+                })
+            }
+        },
+        methods: {
+            even: function (numbers) {
+                return numbers.filter(function (number) {
+                    return number % 2 === 0
+                })
+            }
+        }
+    })
+
+
+    Vue.component('todo-item', {
+        template: '<li>{{ title }}<button v-on:click="$emit(\'remove\')">Remove</button></li>',
+        props: ['title']
+    })
+
+    new Vue({
+        el: '#todo-list-example',
+        data: {
+            newTodoText: '',
+            todos: [
+                {
+                    id: 1,
+                    title: 'Do the dishes',
+                },
+                {
+                    id: 2,
+                    title: 'Take out the trash',
+                },
+                {
+                    id: 3,
+                    title: 'Mow the lawn'
+                }
+            ],
+            nextTodoId: 4
+        },
+        methods: {
+            addNewTodo: function () {
+                this.todos.push({
+                    id: this.nextTodoId++,
+                    title: this.newTodoText
+                })
+                this.newTodoText = ''
+            }
+        }
+    })
+</script>
+</body>
+</html>

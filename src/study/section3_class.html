@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <style>
+        .active {
+            font-size: 20px;
+            color: red;
+        }
+
+        .text-danger {
+            text-decoration: underline;
+        }
+
+        .active1 {
+            font-size: 25px;
+            color: green;
+        }
+
+        .text-danger1 {
+            text-decoration: line-through;
+        }
+
+        .baz {
+            width: 200px;
+        }
+
+        .foo {
+            background-color: bisque;
+        }
+
+        .bar {
+            border: 1px dashed red;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div :class="{active:isActive}">111</div>
+    <div class="static" :class="{active:isActive,'text-danger':hasError}">2222</div>
+    <div :class="classObject">3333</div>
+    <div :class="[activeClass, errorClass]">4444</div>
+    <div :class="[{active1 :activeClass}, errorClass]">55555</div>
+    <my-component :class="{active:isActive}"></my-component>
+    <div :style="{ color: activeColor, fontSize: fontSize + 'px' }">66666</div>
+    <div :style="styleObject">777777</div>
+    <div :style="[baseStyles, overridingStyles]">88888</div>
+    <div :style="{ display: ['-webkit-box', 'table-cell', 'flex'] }">9999999</div>
+</div>
+<script>
+    const myComponent = Vue.component('my-component', {
+        template: '<p class="foo bar">COMPONENT</p>'
+    })
+    const vm = new Vue({
+        el: '#app',
+        data: {
+            isActive: true,
+            hasError: true,
+            activeClass: 'active1',
+            errorClass: 'text-danger1',
+            fontSize: 39,
+            activeColor: 'pink',
+            styleObject: {
+                color: 'red',
+                fontSize: '13px'
+            },
+            baseStyles: {'color': 'blue'},
+            overridingStyles: {'fontSize': '10px'}
+        },
+        components: {
+            'my-component': myComponent
+
+        },
+        computed: {
+            classObject: function () {
+                return {active: false, 'text-danger': true}
+            }
+        }
+    });
+</script>
+</body>
+</html>

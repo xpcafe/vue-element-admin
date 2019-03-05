@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+<div id="app">
+    <p>{{ foo }}</p>
+    <!-- 这里的 `foo` 不会更新！ -->
+    <button v-on:click="foo = 'baz'">Change it</button>
+</div>
+
+<div id="example">
+</div>
+<div id="test1">
+    <span>Message: {{ msg }}</span><br/>
+    <span v-once>这个将不会改变: {{ msg }}</span>
+    <p>Using mustaches: {{ rawHtml }}</p><br/>
+    <p>Using v-html directive: <span v-html="rawHtml"></span></p><br/>
+</div>
+<div id="test2">
+    <div :id="dynamicId"></div>
+    <button  :display="isButtonDisabled">Button</button><br/>
+    <a @click="test">点击事件</a>
+</div>
+<div id="test3">
+    <p>Reversed message: "{{ reversedMessage }}"</p>
+    <p>now: "{{ now }}"</p>
+    <p>now: "{{ now }}"</p>
+</div>
+<div class="classTest">
+    {{msg}}
+    <div v-if="isShow">aaaaa</div>
+</div>
+<script>
+    /***第一段***/
+        // 我们的数据对象
+    var data = {a: 1}
+
+    // 该对象被加入到一个 Vue 实例中
+    var vm = new Vue({
+        data: data
+    })
+
+    // 获得这个实例上的属性
+    // 返回源数据中对应的字段
+    vm.a == data.a // => true
+    console.log(vm.a == data.a);
+
+    // 设置属性也会影响到原始数据
+    vm.a = 2
+    data.a // => 2
+    console.log(data.a);
+
+    // ……反之亦然
+    data.a = 3
+    vm.a // => 3
+    console.log(vm.a);
+
+    /***第二段***/
+    var obj = {
+        foo: 'bar'
+    }
+
+    // Object.freeze(obj)
+
+    new Vue({
+        el: '#app',
+        data: obj
+    })
+
+    /***第三段***/
+    var data = {a: 1}
+    var vm = new Vue({
+        el: '#example',
+        data: data
+    })
+
+    vm.$data === data // => true
+    console.log(vm.$data === data)
+    vm.$el === document.getElementById('example') // => true
+    console.log(vm.$el === document.getElementById('example'))
+
+    // $watch 是一个实例方法
+    vm.$watch('a', function (newValue, oldValue) {
+        // 这个回调将在 `vm.a` 改变后调用
+        console.log("newValue:" + newValue + ",oldValue: " + oldValue)
+    })
+    /***第四段***/
+    new Vue({
+        data: {
+            a: 1
+        },
+        created: function () {
+            // `this` 指向 vm 实例
+            console.log('a is: ' + this.a)
+        }
+    })
+    /***第五段***/
+    vm = new Vue({
+        el: '#test1',
+        data: {
+            msg: '测试消息',
+            rawHtml: '<span style="color:#704eff">身手矫捷</span>',
+        }
+    })
+    vm.$data.msg = '测试消息2';
+
+    vm = new Vue({
+        el: '#test2',
+        data: {
+            dynamicId:'1',
+            isButtonDisabled: 'none',
+            test:function(){
+                alert(22);
+            }
+        }
+    })
+
+    vm = new Vue({
+        el: '#test3',
+        data: {
+            message: '消息```'
+        },
+        computed: {
+            reversedMessage: function () {
+                return this.message.split('').reverse().join('')
+            },
+            now: function () {
+                return Date.now()+Math.random();
+            }
+        },
+        methods: {
+            reversedMessage1: function () {
+                return this.message.split('').reverse().join('aa')
+            },
+            now1: function () {
+                return Date.now()+Math.random();
+            }
+        }
+    })
+
+    vm = new Vue({
+        el: '.classTest',
+        data: {
+            msg: '信息',
+            isShow: true
+        }
+    })
+</script>
+</body>
+</html>

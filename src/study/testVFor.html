@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+<div id="app">
+    <div v-if="i>0" :style="styleInfo" :class="['a','v',{'c':i==1}]">i>0</div>
+    {{msg}}
+    <input v-model="val" />
+    <input type="button" value="提交" @click="btnClick">
+    <ul>
+        <li v-for="item in arr">{{item}}</li>
+    </ul>
+</div>
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            arr: [1, 2, 3],
+            val: 'inp',
+            msg: '消息',
+            i: 2,
+            styleInfo: {
+                color: 'red'
+            },
+            classInfo: ['a', 'b', 'c']
+        },
+        methods: {
+            btnClick:function () {
+                this.arr.push(this.val);
+                this.val = '';
+            }
+        },
+        watch: {
+            i: function () {
+                return 'test';
+            }
+        }
+    })
+</script>
+</body>
+</html>
